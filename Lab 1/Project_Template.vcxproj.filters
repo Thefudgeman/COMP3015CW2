@@ -72,6 +72,12 @@
     <ClCompile Include="helper\sphere.cpp">
       <Filter>helper</Filter>
     </ClCompile>
+    <ClCompile Include="helper\grid.cpp">
+      <Filter>helper</Filter>
+    </ClCompile>
+    <ClCompile Include="helper\frustum.cpp">
+      <Filter>helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\basic_uniform.frag">
@@ -102,6 +108,18 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shader\CW2vert.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\vertexAnim.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\vertexAnim.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\solid.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader\solid.vert">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>
@@ -164,6 +182,15 @@
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="helper\sphere.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\particleutils.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\grid.h">
+      <Filter>helper</Filter>
+    </ClInclude>
+    <ClInclude Include="helper\frustum.h">
       <Filter>helper</Filter>
     </ClInclude>
     <ClInclude Include="helper\random.h">

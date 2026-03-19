@@ -14,6 +14,7 @@
 #include "helper/cube.h"
 #include "helper/texture.h"
 #include "helper/skybox.h"
+#include "helper/frustum.h"
 #include <iostream>
 
 using glm::vec3;
@@ -34,7 +35,14 @@ private:
     SkyBox sky;
 
     GLuint fsQuad, fboHandle, renderTex;
+    GLuint shadowFBO, pass1Index, pass2Index;
 
+    int shadowMapWidth, shadowMapHeight;
+
+    glm::mat4 lightPV, shadowBias;
+
+    Frustum lightFrustum;
+    GLuint depthTex;
     GLuint brick = Texture::loadTexture("media/texture/brick1.jpg");
     GLuint moss = Texture::loadTexture("media/texture/moss.png");
     GLuint ogreDiffuse = Texture::loadTexture("media/texture/ogre_diffuse.png");
@@ -47,20 +55,26 @@ private:
     GLuint cubeTex = Texture::loadHdrCubeMap("media/texture/cube/pisa-hdr/pisa");
     GLuint nightCubeTex = Texture::loadCubeMap("media/texture/cube/NightSky/night");
     GLuint knucklesTex = Texture::loadTexture("media/knuckles/AncientUgandan.png");
+    GLuint waveTex = Texture::loadTexture("media/texture/water.jpg");
+
 
 
     void setupFBO();
     void pass1();
     void pass2();
+    void drawScene();
+
+    void spitOutDepthBuffer();
 
     void compile();
 
 public:
-    GLSLProgram prog, mixShader, normalShader, skyBoxShader;
+    GLSLProgram prog, mixShader, animShader, skyBoxShader, solidShader;
 
     SceneBasic_Uniform();
     void rotateModelMMM();
     void setMatrices();
+    void setAnimMatrices();
 
     void setMatricesSkyBox();
   
@@ -73,6 +87,7 @@ public:
     float tPrev = 0.0f;
     float angle = 0.0f;
     float rotSpeed = 0.0f;
+    float time;
 };
 
 #endif // SCENEBASIC_UNIFORM_H

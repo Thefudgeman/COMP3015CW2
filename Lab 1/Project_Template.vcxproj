@@ -147,8 +147,10 @@
   <ItemGroup>
     <ClCompile Include="glad.c" />
     <ClCompile Include="helper\cube.cpp" />
+    <ClCompile Include="helper\frustum.cpp" />
     <ClCompile Include="helper\glslprogram.cpp" />
     <ClCompile Include="helper\glutils.cpp" />
+    <ClCompile Include="helper\grid.cpp" />
     <ClCompile Include="helper\objmesh.cpp" />
     <ClCompile Include="helper\plane.cpp" />
     <ClCompile Include="helper\skybox.cpp" />
@@ -170,16 +172,23 @@
     <None Include="shader\normalShader.vert" />
     <None Include="shader\skybox.frag" />
     <None Include="shader\skybox.vert" />
+    <None Include="shader\solid.frag" />
+    <None Include="shader\solid.vert" />
     <None Include="shader\texture_mixing.frag" />
     <None Include="shader\texture_mixing.vert" />
+    <None Include="shader\vertexAnim.frag" />
+    <None Include="shader\vertexAnim.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="helper\aabb.h" />
     <ClInclude Include="helper\cube.h" />
     <ClInclude Include="helper\drawable.h" />
+    <ClInclude Include="helper\frustum.h" />
     <ClInclude Include="helper\glslprogram.h" />
     <ClInclude Include="helper\glutils.h" />
+    <ClInclude Include="helper\grid.h" />
     <ClInclude Include="helper\objmesh.h" />
+    <ClInclude Include="helper\particleutils.h" />
     <ClInclude Include="helper\plane.h" />
     <ClInclude Include="helper\random.h" />
     <ClInclude Include="helper\scene.h" />

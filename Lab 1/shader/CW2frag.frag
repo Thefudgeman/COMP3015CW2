@@ -10,6 +10,9 @@ uniform float EdgeThreshold;
 uniform int Pass;
 uniform bool edgeDetection;
 
+layout(binding=1) uniform sampler2DShadow ShadowMap;
+in vec4 ShadowCoord;
+
 const vec3 lum = vec3(0.2126, 0.7152, 0.0722);
 
 uniform struct LightInfo
@@ -17,7 +20,8 @@ uniform struct LightInfo
     vec4 Position;
     vec3 La;
     vec3 L;
-}lights[3];
+    vec3 Intensity;
+}Light;
 
 uniform struct MaterialInfo
 {
@@ -45,11 +49,61 @@ uniform struct FogInfo
 }Fog;
 
 
+vec3 phongModelDiffAndSpec()
+{
+   vec3 texColour = texture(Tex1, TexCoord).rgb;
+
+    vec3 s = normalize(vec3(Light.Position) - pos);
+    vec3 v = normalize(-pos.xyz);
+    vec3 r = reflect(-s,n);
+    float sDotN = max(dot(s,n),0.0);
+    vec3 diffuse = Light.Intensity * texColour * sDotN;
+    vec3 spec = vec3(0.0);
+    if(sDotN > 0.0)
+    {
+        spec = Light.Intensity * Material.Ks * pow(max(dot(r,v), 0.0), Material.Shinniness);
+    }
+    return diffuse + spec;
+}
+
+subroutine void RenderPassType();
+subroutine uniform RenderPassType RenderPass;
+
+subroutine (RenderPassType)
+void shadeWithShadow()
+{
+   vec3 texColour = texture(Tex1, TexCoord).rgb;
+   
+   vec3 ambient = texColour * Light.Intensity;
+   vec3 diffAndSpec = phongModelDiffAndSpec();
+
+   float shadow = 1.0f;
+   if(ShadowCoord.z >= 0)
+   {
+        shadow = textureProj(ShadowMap, ShadowCoord); 
+   }
+
+    FragColor = vec4(diffAndSpec * shadow + ambient, 1.0);
+
+    FragColor = pow(FragColor, vec4(1.0/2.2));
+}
+
+subroutine (RenderPassType)
+void recordDepth()
+{
+    if(texture(Tex1, TexCoord).a < 0.15)
+        discard;
+    float d = gl_FragCoord.z;
+}
+
+
+
+
 vec3 phongModel(int light, vec3 position, vec3 n)
 {
-    vec3 ambient = lights[light].La * Material.Ka;
+    vec3 ambient = Light.La * Material.Ka;
     
-    vec3 s = normalize(vec3(lights[light].Position.xyz-position));
+    vec3 s = normalize(vec3(Light.Position.xyz-position));
     float sDotN = max(dot(n,s),0.0);
     vec3 diffuse = Material.Kd*sDotN;
 
@@ -62,7 +116,7 @@ vec3 phongModel(int light, vec3 position, vec3 n)
         spec = Material.Ks * pow(max(dot(r,v), 0.0), Material.Shinniness);
     }
 
-    return ambient + lights[light].L * (diffuse + spec);
+    return ambient + Light.L * (diffuse + spec);
 
 }
 
@@ -87,15 +141,15 @@ vec3 blinnPhongSpot(vec3 position, vec3 n)
     if (angle < Spot.Cutoff)
     {
         spotScale = pow(cosAng, Spot.Exponent);
-        float sDotN = max(dot(n,s),0.0);
+        float sDotN = max(dot(s,n),0.0);
         diffuse = texColour*sDotN;    
         
 
         if(sDotN > 0.0)
         {
             vec3 v = normalize(-position.xyz);
-            vec3 h = normalize(v+s);
-            spec = Material.Ks * pow(max(dot(h,n), 0.0), Material.Shinniness);
+            vec3 r = reflect(-s, n);
+            spec = Material.Ks * pow(max(dot(r,v), 0.0), Material.Shinniness);
         }
     }
 
@@ -122,46 +176,11 @@ vec4 pass1()
 
        Colour = mix(Fog.Colour, blinnPhongSpot(pos,normalize(n)), fogFactor);
 
-      // vec3 texColour = texture(Tex1, TexCoord).rgb;
+       vec3 texColour = texture(Tex1, TexCoord).rgb;
 
-       return vec4(Colour, 1.0);
+       return vec4(blinnPhongSpot(pos,normalize(n)), 1.0);
 }
 
-vec4 pass2()
-{
-    ivec2 pix = ivec2(gl_FragCoord.xy);
-
-    float s00 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(-1,1)).rgb);
-    float s10 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(-1,0)).rgb);
-    float s20 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(-1,-1)).rgb);
-    float s01 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(0,1)).rgb);
-    float s21 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(0,-1)).rgb);
-    float s02 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(1,1)).rgb);
-    float s12 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(1,0)).rgb);
-    float s22 = luminance(texelFetchOffset(Tex1, pix, 0, ivec2(1,-1)).rgb);
-
-    float sx = s00 + 2*s10+s20 - (s02 + 2*s12+s22);
-    float sy = s00 + 2*s01+s02 - (s20 + 2*s21+s22);
-
-    float g = sx*sx + sy*sy;
-    if(edgeDetection)
-    {
-       if(g > EdgeThreshold)
-       {
-           return vec4(1.0);
-       }
-       else
-        {
-            return texelFetch(Tex1, pix,0);
-        }    
-    }
-    else
-    {
-        return texelFetch(Tex1, pix,0);
-    }
-
-
-}
 
 
 void main() {
@@ -175,18 +194,18 @@ void main() {
     //     Colour = phongModel(0, pos, normalize(n));
  //   }
 
-    if(Pass == 1)
-    {
-        if(texture(Tex1, TexCoord).a < 0.15)
-        {
-            discard;
-        }
-        FragColor = pass1();
-    }
-    if(Pass == 2)
-    {
-        FragColor = pass2();
-    }
+//    if(Pass == 1)
+//    {
+ //       if(texture(Tex1, TexCoord).a < 0.15)
+//        {
+ //           discard;
+//        }
+ //       FragColor = pass1();
+//    }
+//    if(Pass == 2)
+//    {
+ //       FragColor = pass2();
+//    }
 
    //      vec3 Colour = vec3(0.0f);
 
@@ -203,5 +222,12 @@ void main() {
       // vec3 texColour = texture(Tex1, TexCoord).rgb;
 
     //   FragColor = vec4(Colour, 1.0);
+
+
+
+
+    RenderPass();
+
+
 }
 
