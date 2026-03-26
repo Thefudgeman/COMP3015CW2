@@ -10,9 +10,9 @@ out vec2 TexCoord;
 
 uniform float Time;
 
-uniform float Freq = 2.5;
+uniform float Freq = 1.0;
 uniform float Velocity = 2.5;
-uniform float Amp = 1.6;
+uniform float Amp = 0.5;
 
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
