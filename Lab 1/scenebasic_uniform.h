@@ -57,14 +57,10 @@ private:
     GLuint knucklesTex = Texture::loadTexture("media/knuckles/AncientUgandan.png");
     GLuint waveTex = Texture::loadTexture("media/texture/water.jpg");
 
-
-
-    void setupFBO();
-    void pass1();
-    void pass2();
+    float lightAngle, lightRotationSpeed;
     void drawScene();
-
-    void spitOutDepthBuffer();
+    void drawFloor();
+    void drawSpot(const glm::vec3& pos, float rought, int metal, const glm::vec3& colour);
 
     void compile();
 

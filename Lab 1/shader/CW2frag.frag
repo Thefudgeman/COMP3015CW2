@@ -67,70 +67,74 @@ float geomSmith(float dotProd)
 
 vec3 schlickFresnel(float lDotH)
 {
+    vec3 texColour = texture(Tex1, TexCoord).rgb;
     vec3 f0 = vec3(0.04);
     if(Material.Metal)
     {
-        f0 = Material.Color
+        f0 = texColour;
     }
     return f0 + (1 - f0) * pow(1.0 - lDotH, 5);
 }
 
 vec3 microfacetModel(int lightIdx, vec3 position, vec3 n)
 {
+    vec3 texColour = texture(Tex1, TexCoord).rgb;
+
     vec3 diffuseBrdf = vec3(0.0);
     if(!Material.Metal)
     {
-        diffuseBrdf = Material.Color;
+        diffuseBrdf = texColour;
     }
 
-    vec3 1 = vec3(0.0), lightI = Light[lightIdx].L;
+    vec3 I = vec3(0.0);
+    vec3 lightI = Light[lightIdx].L;
     if(Light[lightIdx].Position.w == 0)
     {
-         1 = normalize(Light[lightIdx].Position.xyz);
+         I = normalize(Light[lightIdx].Position.xyz);
     }
     else
     {
-        1 = Light[lightIdx].Position.xyz - position;
-        float dist = length(1);
-        1 = normalize(1);
+        I = Light[lightIdx].Position.xyz - position;
+        float dist = length(I);
+        I = normalize(I);
         lightI /= (dist * dist);
     }
 
     vec3 v = normalize(-position);
-    vec3 h = normalize(v+1);
+    vec3 h = normalize(v+I);
     float nDotH = dot(n,h);
-    float 1DotH = dot(1,h);
-    float nDotL = maz(dot(n,1), 0.0);
+    float IDotH = dot(I,h);
+    float nDotL = max(dot(n,I), 0.0);
     float nDotV = dot(n,v);
-    vec3 specBrdf = 0.25 * ggxDistribution(nDotH) * schlickFresnel(1DotH) * geomSmith(nDotL) * geomSmith(nDotV);
+    vec3 specBrdf = 0.25 * ggxDistribution(nDotH) * schlickFresnel(IDotH) * geomSmith(nDotL) * geomSmith(nDotV);
 
-    return (diffuseBrdf + PI * sepcBrdf) * lightI * nDotL;
+    return (diffuseBrdf + PI * specBrdf) * lightI * nDotL;
 
 }
 
 
 
 
-vec3 phongModel(int light, vec3 position, vec3 n)
-{
-    vec3 ambient = Light.La * Material.Ka;
+//vec3 phongModel(int light, vec3 position, vec3 n)
+//{
+ //   vec3 ambient = Light.La * Material.Ka;
     
-    vec3 s = normalize(vec3(Light.Position.xyz-position));
-    float sDotN = max(dot(n,s),0.0);
-    vec3 diffuse = Material.Kd*sDotN;
+//    vec3 s = normalize(vec3(Light.Position.xyz-position));
+//    float sDotN = max(dot(n,s),0.0);
+ //   vec3 diffuse = Material.Kd*sDotN;
 
-    vec3 spec = vec3(0.0f);
+//    vec3 spec = vec3(0.0f);
 
-    if(sDotN > 0.0)
-    {
-        vec3 v = normalize(-position.xyz);
-        vec3 r = reflect(-s,n);
-        spec = Material.Ks * pow(max(dot(r,v), 0.0), Material.Shinniness);
-    }
+//    if(sDotN > 0.0)
+//    {
+ //       vec3 v = normalize(-position.xyz);
+//        vec3 r = reflect(-s,n);
+//        spec = Material.Ks * pow(max(dot(r,v), 0.0), Material.Shinniness);
+//    }
 
-    return ambient + Light.L * (diffuse + spec);
+  //  return ambient + Light.L * (diffuse + spec);
 
-}
+//}
 
 vec3 blinnPhongSpot(vec3 position, vec3 n)
 {
@@ -217,7 +221,7 @@ void main() {
         sum+= microfacetModel(i, pos, norm);
      }
 
-     sum = pow(sum, vec(1.0/2.2));
+     sum = pow(sum, vec3(1.0/2.2));
 
      FragColor = vec4(sum,1);
 
