@@ -41,7 +41,7 @@ void SceneBasic_Uniform::initScene()
 
 
     angle = glm::half_pi<float>();
-    vec4 lightPos = vec4(15.0f, 1.0f, 15.0f, 1.0f);
+    vec4 lightPos = vec4(15.0f, 10.0f, 10.0f, 1.0f);
 
     lightAngle = 0.0f;
     lightRotationSpeed = 1.5f;
@@ -72,30 +72,6 @@ void SceneBasic_Uniform::initScene()
     rotateModel = mat4(1.0f);
     rotateModel = glm::translate(rotateModel, vec3(0.0f, 0.26f, 0.0f));
 
-
-    prog.setUniform("Light.Intensity", vec3(0.85f));
-
-
-    prog.use();
-    prog.setUniform("Light.L", vec3(1.0f, 0.3f, 0.8f));
-    prog.setUniform("Light.La", vec3(0.2f));
-
-    prog.setUniform("EdgeThreshold", 0.05f);
-
-
-    prog.setUniform("Spot.L", vec3(0.9f));
-    prog.setUniform("Spot.La", vec3(0.5f));
-    prog.setUniform("Spot.Exponent", 10.0f);
-    prog.setUniform("Spot.Cutoff", glm::radians(30.0f));
-
-    prog.setUniform("Fog.MaxDist", 30.0f);
-    prog.setUniform("Fog.MinDist", 1.0f);
-    prog.setUniform("Fog.Colour", vec3(0.5f,0.5f,0.5f));
-
-    skyBoxShader.use();
-    skyBoxShader.setUniform("Fog.MaxDist", 30.0f);
-    skyBoxShader.setUniform("Fog.MinDist", 0.1f);
-    skyBoxShader.setUniform("Fog.Colour", vec3(0.5f, 0.5f, 0.5f));
 
    
 
@@ -237,14 +213,7 @@ void SceneBasic_Uniform::drawScene()
     animShader.use();
 
     animShader.setUniform("Time", time);
-    animShader.setUniform("Light[0].L", vec3(45.0f));
-    animShader.setUniform("Light[0].Position", view * lightPos);
 
-    animShader.setUniform("Light[1].L", vec3(0.3f));
-    animShader.setUniform("Light[1].Position", view * lightPos);
-
-    animShader.setUniform("Light[2].L", vec3(45.0f));
-    animShader.setUniform("Light[2].Position", view * lightPos);
 
 
     float metalRough = 0.43f;
@@ -253,14 +222,7 @@ void SceneBasic_Uniform::drawScene()
     drawFloor();
 
     prog.use();
-    prog.setUniform("Light[0].L", vec3(45.0f));
-    prog.setUniform("Light[0].Position", view * lightPos);
 
-    prog.setUniform("Light[1].L", vec3(0.3f));
-    prog.setUniform("Light[1].Position", view * lightPos);
-
-    prog.setUniform("Light[2].L", vec3(45.0f));
-    prog.setUniform("Light[2].Position", view * lightPos);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cement);
@@ -269,9 +231,9 @@ void SceneBasic_Uniform::drawScene()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, knucklesTex);
-    drawSpot(knuckles->position, metalRough, 1, vec3(1, 0.71f, 0.29f));
+    drawSpot(knuckles->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
     knuckles->render();
-    if (collision(knuckles->bbox, mesh->bbox))
+    if (collision(knuckles->bbox, mesh->bbox)) // repeat for all future objects and change position of objects based off it
     {
         std::cout << "Collision" << std::endl;
     }
