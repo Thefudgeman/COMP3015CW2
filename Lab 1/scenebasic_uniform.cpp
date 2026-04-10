@@ -22,7 +22,8 @@ using glm::vec4;
 SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(30.0f,30.0f, 200, 2), teapot(14,glm::mat4(1.0f)), torus(1.75f*0.75f, 0.75f*0.75f, 50,50), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>()/8.0f), sky(300.0f), shadowMapWidth(512), shadowMapHeight(512)
 {
     mesh = ObjMesh::load("media/pig_triangulated.obj", true);
-    barrel = ObjMesh::load("media/knuckles/AncientUgandan.obj", true);
+    mesh->position = vec3(0, 0, 0);
+    knuckles = ObjMesh::load("media/knuckles/AncientUgandan.obj", true);
     ogre = ObjMesh::load("media/bs_ears.obj", true);
 }
 
@@ -148,6 +149,9 @@ void SceneBasic_Uniform::update(float t)
 
     time = t;
 
+    knuckles->updatePhysics(deltaT);
+    mesh->updatePhysics(deltaT);
+
     rotateModel = glm::rotate(rotateModel, glm::radians(-1.0f), vec3(1.0f,0.0f,0.0f));
     barrelModel = glm::rotate(barrelModel, glm::radians(-0.3f), vec3(0.0f, 1.0f, 0.0f));
 
@@ -158,7 +162,6 @@ void SceneBasic_Uniform::render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     prog.use();
-   
     drawScene();
    
 }
@@ -261,15 +264,19 @@ void SceneBasic_Uniform::drawScene()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cement);
-    drawSpot(vec3(-3.0f,0.0f,3.0f), metalRough, 1, vec3(1,0.71f,0.29f));
+    drawSpot(mesh->position, metalRough, 1, vec3(1,0.71f,0.29f));
     mesh->render();
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, knucklesTex);
-    drawSpot(vec3(0.0f, 0.0f, 3.0f), metalRough, 1, vec3(1, 0.71f, 0.29f));
-
-    barrel->render();
+    drawSpot(knuckles->position, metalRough, 1, vec3(1, 0.71f, 0.29f));
+    knuckles->render();
+    if (collision(knuckles->bbox, mesh->bbox))
+    {
+        std::cout << "Collision" << std::endl;
+    }
 }
+
 
 void SceneBasic_Uniform::drawSpot(const vec3& pos, float rough, int metal, const vec3& colour)
 {
@@ -335,5 +342,12 @@ void SceneBasic_Uniform::resize(int w, int h)
     width = w;
     height = h;
     projection = glm::perspective(glm::radians(70.0f), (float)w / h, 0.3f, 600.0f);
+}
+
+bool SceneBasic_Uniform::collision(const Aabb& a, const Aabb& b)
+{
+    return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
+        (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
+        (a.min.z <= b.max.z && a.max.z >= b.min.z);
 }
 

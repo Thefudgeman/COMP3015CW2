@@ -189,7 +189,7 @@ private:
         cameraLastYPos = (float)ypos;
 
         //Moderates the change in position based on sensitivity value
-        const float sensitivity = 0.025f;
+        const float sensitivity = 0.05f;
         xOffset *= sensitivity;
         yOffset *= sensitivity;
 

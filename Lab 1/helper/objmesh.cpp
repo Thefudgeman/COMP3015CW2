@@ -42,7 +42,7 @@ std::unique_ptr<ObjMesh> ObjMesh::load( const char * fileName, bool center, bool
 
     // Generate tangents?
     if( genTangents ) meshData.generateTangents();
-
+    
     // Convert to GL format
     GlMeshData glMesh;
     meshData.toGlMesh(glMesh);
@@ -420,3 +420,11 @@ void ObjMesh::GlMeshData::convertFacesToAdjancencyFormat()
     faces = elAdj;
 }
 
+void ObjMesh::updatePhysics(float dt)
+{
+    velocity += acceleration * dt;
+    position += velocity * dt;
+
+    bbox.min += position;
+    bbox.max += position;
+}

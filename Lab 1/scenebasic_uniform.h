@@ -28,7 +28,7 @@ private:
     Teapot teapot;
     Plane plane;
     std::unique_ptr<ObjMesh> mesh;
-    std::unique_ptr<ObjMesh> barrel, ogre;
+    std::unique_ptr<ObjMesh> knuckles, ogre;
     Cube cube;
     glm::mat4 rotateModel;
     glm::mat4 barrelModel;
@@ -61,7 +61,7 @@ private:
     void drawScene();
     void drawFloor();
     void drawSpot(const glm::vec3& pos, float rought, int metal, const glm::vec3& colour);
-
+    bool collision(const Aabb& a, const Aabb& b);
     void compile();
 
 public:

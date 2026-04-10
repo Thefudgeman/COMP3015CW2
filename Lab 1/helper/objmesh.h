@@ -14,16 +14,22 @@ class ObjMesh : public TriangleMesh {
 private:
     bool drawAdj;
 
+
 public:
     static std::unique_ptr<ObjMesh> load(const char * fileName, bool center = false, bool genTangents = false);
     static std::unique_ptr<ObjMesh> loadWithAdjacency(const char * fileName, bool center = false);
-
     void render() const override;
+    void updatePhysics(float dt);
+
+    glm::vec3 position = glm::vec3(0, 50, 0);
+    glm::vec3 acceleration = glm::vec3(0, -9.81, 0);
+    glm::vec3 velocity = glm::vec3(0, 0, 0);
+    glm::vec3 hitBox = glm::vec3(0, 0, 0);
+    Aabb bbox;
+
 
 protected:
     ObjMesh();
-
-    Aabb bbox;
 
     // Helper classes used for loading
     class GlMeshData {
