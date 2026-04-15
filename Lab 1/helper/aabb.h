@@ -10,6 +10,7 @@ class Aabb {
 
 public:
     glm::vec3 min, max;
+    glm::vec3 halfSize;
 
     Aabb() {
         reset();

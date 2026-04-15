@@ -251,14 +251,15 @@ private:
         if (glfwGetKey(WindowIn, GLFW_KEY_A) == GLFW_PRESS)
         {
             scene.knuckles->position -= movementSpeed * right;
+
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_D) == GLFW_PRESS)
         {
             scene.knuckles->position += movementSpeed * right;
         }
-        if (glfwGetKey(WindowIn, GLFW_KEY_SPACE) == GLFW_PRESS && scene.knuckles->isGrounded )
+        if (glfwGetKey(WindowIn, GLFW_KEY_SPACE) == GLFW_PRESS && scene.knuckles->isGrounded)
         {
-            scene.knuckles->velocity += glm::vec3(0, 6, 0);
+            scene.knuckles->velocity.y +=  6.0f;           
         }
     }
 };

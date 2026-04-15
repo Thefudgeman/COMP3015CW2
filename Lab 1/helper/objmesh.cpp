@@ -16,6 +16,9 @@ using std::ifstream;
 using std::istringstream;
 #include <map>
 
+
+
+
 ObjMesh::ObjMesh() : drawAdj(false)
 { }
 
@@ -179,6 +182,7 @@ void ObjMesh::GlMeshData::center( Aabb & bbox ) {
     // Update bbox
     bbox.max = bbox.max - center;
     bbox.min = bbox.min - center;
+    bbox.halfSize = glm::vec3((bbox.max - bbox.min)) * 0.5f;
 }
 
 ObjMesh::ObjMeshData::ObjVertex::ObjVertex(std::string &vertString, ObjMeshData * mesh) : pIdx(-1), nIdx(-1), tcIdx(-1) {

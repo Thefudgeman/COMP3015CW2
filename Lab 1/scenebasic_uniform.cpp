@@ -20,11 +20,13 @@ using glm::vec4;
 
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(30.0f,30.0f, 200, 2), teapot(14,glm::mat4(1.0f)), torus(1.75f*0.75f, 0.75f*0.75f, 50,50), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>()/8.0f), sky(300.0f), shadowMapWidth(512), shadowMapHeight(512)
+SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(30.0f, 30.0f, 200, 2), teapot(14, glm::mat4(1.0f)), torus(1.75f * 0.75f, 0.75f * 0.75f, 50, 50), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), sky(300.0f), shadowMapWidth(512), shadowMapHeight(512)
 {
     mesh = ObjMesh::load("media/pig_triangulated.obj", true);
     knuckles = ObjMesh::load("media/knuckles/AncientUgandan.obj", true);
     floatingIsland = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
+    floatingIsland->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
+    floatingIsland->bbox.max -= vec3(3.0f, -1.0f, 1.1f);//right,up,back
 
 }
 
@@ -35,8 +37,8 @@ void SceneBasic_Uniform::initScene()
     glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
     glEnable(GL_DEPTH_TEST);
-    
-    
+
+
     view = glm::lookAt(vec3(5.0f, 5.0f, 7.5f), vec3(0.0f, 0.75f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
     projection = mat4(1.0f);
 
@@ -48,10 +50,10 @@ void SceneBasic_Uniform::initScene()
     lightRotationSpeed = 1.5f;
     prog.use();
     prog.setUniform("Light[0].L", vec3(45.0f));
-    prog.setUniform("Light[0].Position", view*lightPos);
+    prog.setUniform("Light[0].Position", view * lightPos);
 
     prog.setUniform("Light[1].L", vec3(0.3f));
-    prog.setUniform("Light[1].Position", view* lightPos);
+    prog.setUniform("Light[1].Position", view * lightPos);
 
     prog.setUniform("Light[2].L", vec3(45.0f));
     prog.setUniform("Light[2].Position", view * lightPos);
@@ -80,7 +82,7 @@ void SceneBasic_Uniform::initScene()
     rotateModel = glm::translate(rotateModel, vec3(0.0f, 0.26f, 0.0f));
 
 
-   
+
 
 }
 
@@ -133,37 +135,47 @@ void SceneBasic_Uniform::update(float t)
     time = t;
 
 
-    
+
     knuckles->velocity += gravity * deltaT;
 
-    
+
     float newY = knuckles->position.y + knuckles->velocity.y * deltaT;
 
-    
+
+
+    knuckles->bbox.min = knuckles->position - knuckles->bbox.halfSize;
+    knuckles->bbox.max = knuckles->position + knuckles->bbox.halfSize;
+
     Aabb yBBox = knuckles->bbox;
     float dy = newY - knuckles->position.y;
     yBBox.min.y += dy;
-    yBBox.max.y += dy;
+    yBBox.max.y += dy; 
 
-    
-    if (collision(floatingIsland->bbox, yBBox))
+
+    bool below = knuckles->position.y < floatingIsland->bbox.max.y && knuckles->position.y > floatingIsland->bbox.max.y -0.2f;
+
+
+
+
+    if (collision(floatingIsland->bbox, yBBox) && below)
     {
+
         collisionTrue(floatingIsland->bbox);
-        
     }
     else
     {
-        
         knuckles->position.y = newY;
         knuckles->isGrounded = false;
     }
-
     float height = knuckles->bbox.max.y - knuckles->bbox.min.y;
 
     knuckles->bbox.min.y = knuckles->position.y;
     knuckles->bbox.max.y = knuckles->position.y + height;
 
-    rotateModel = glm::rotate(rotateModel, glm::radians(-1.0f), vec3(1.0f,0.0f,0.0f));
+
+    //  floatingIsland->bbox.min.y = floatingIsland->position.y;
+    //  floatingIsland->bbox.max.y = floatingIsland->position.y + floatingIsland->bbox.max.y - floatingIsland->bbox.min.y;
+    rotateModel = glm::rotate(rotateModel, glm::radians(-1.0f), vec3(1.0f, 0.0f, 0.0f));
     barrelModel = glm::rotate(barrelModel, glm::radians(-0.3f), vec3(0.0f, 1.0f, 0.0f));
 
 }
@@ -174,7 +186,7 @@ void SceneBasic_Uniform::render()
 
     prog.use();
     drawScene();
-   
+
 }
 
 void SceneBasic_Uniform::drawScene()
@@ -210,13 +222,13 @@ void SceneBasic_Uniform::drawScene()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cement);
-    drawSpot(mesh->position, metalRough, 1, vec3(1,0.71f,0.29f));
+    drawSpot(mesh->position, metalRough, 1, vec3(1, 0.71f, 0.29f));
     mesh->render();
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, knucklesTex);
     drawSpot(knuckles->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
-   // knuckles->render();
+    // knuckles->render();
 
 
     glActiveTexture(GL_TEXTURE0);
@@ -224,9 +236,9 @@ void SceneBasic_Uniform::drawScene()
     drawSpot(floatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
     floatingIsland->render();
 
-    
 
-    cameraPosition = knuckles->position + vec3(0,1,0);
+
+    cameraPosition = knuckles->position;
 
 
 }
@@ -250,7 +262,7 @@ void SceneBasic_Uniform::drawFloor()
     animShader.setUniform("Material.Rough", 0.9f);
     animShader.setUniform("Material.Metal", 0);
     animShader.setUniform("Material.Color", vec3(0.2f));
-    model = glm::translate(model, vec3(0.0f, - 0.75f, 0.0f));
+    model = glm::translate(model, vec3(0.0f, -0.75f, 0.0f));
 
     setAnimMatrices();
     plane.render();
@@ -258,7 +270,7 @@ void SceneBasic_Uniform::drawFloor()
 
 void SceneBasic_Uniform::setMatrices()
 {
-    mat4 mv = view*model;
+    mat4 mv = view * model;
     prog.setUniform("ModelViewMatrix", mv);
     prog.setUniform("NormalMatrix", glm::mat3(vec3(mv[0]), vec3(mv[1]), vec3(mv[2])));
     prog.setUniform("MVP", projection * mv);
@@ -311,6 +323,7 @@ void SceneBasic_Uniform::collisionTrue(Aabb groundBbox)
     {
         float islandTop = groundBbox.max.y;
 
+        std::cout << knuckles->velocity.y << endl;
 
         knuckles->position.y = islandTop;
 
@@ -319,8 +332,6 @@ void SceneBasic_Uniform::collisionTrue(Aabb groundBbox)
     }
     else
     {
-
-        knuckles->velocity.y = 0;
+        knuckles->isGrounded = false;
     }
 }
-
