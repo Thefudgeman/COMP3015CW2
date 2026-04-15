@@ -26,7 +26,7 @@ public:
     glm::vec3 velocity = glm::vec3(0, 0, 0);
     glm::vec3 hitBox = glm::vec3(0, 0, 0);
     Aabb bbox;
-
+    bool isGrounded;
 
 protected:
     ObjMesh();

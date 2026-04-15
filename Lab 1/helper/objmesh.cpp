@@ -419,12 +419,3 @@ void ObjMesh::GlMeshData::convertFacesToAdjancencyFormat()
     // Copy all data back into el
     faces = elAdj;
 }
-
-void ObjMesh::updatePhysics(float dt)
-{
-    velocity += acceleration * dt;
-    position += velocity * dt;
-
-    bbox.min += position;
-    bbox.max += position;
-}

@@ -155,6 +155,7 @@ private:
             float currentFrame = static_cast<float>(glfwGetTime());
             deltaTime = currentFrame - lastFrame;
             lastFrame = currentFrame;
+            cameraPosition = scene.cameraPosition;
             scene.view = glm::lookAt(cameraPosition, cameraPosition + cameraFront, cameraUp); //Sets the position of the viewer, the movement direction in relation to it & the world up direction
 
             ProcessUserInput(window, scene);
@@ -224,68 +225,40 @@ private:
         }
 
         //Extent to which to move in one instance
-        float movementSpeed = 7.0f * deltaTime;
+        float movementSpeed = 3.0f * deltaTime;
         //WASD controls
         if (glfwGetKey(WindowIn, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
             movementSpeed *= 2.0f;
         }
-    //    if (glfwGetKey(WindowIn, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-    //    {
-    //        movementSpeed /= 2.0f;
-      //  }
+
+
+        glm::vec3 forward = cameraFront;
+        forward.y = 0.0f;               
+        forward = normalize(forward);
+
+        glm::vec3 right = normalize(cross(forward, cameraUp));
+
+        // Movement
         if (glfwGetKey(WindowIn, GLFW_KEY_W) == GLFW_PRESS)
         {
-            cameraPosition += movementSpeed * cameraFront;
+            scene.knuckles->position += movementSpeed * forward;
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_S) == GLFW_PRESS)
         {
-            cameraPosition -= movementSpeed * cameraFront;
+            scene.knuckles->position -= movementSpeed * forward;
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_A) == GLFW_PRESS)
         {
-            cameraPosition -= normalize(cross(cameraFront, cameraUp)) * movementSpeed;
+            scene.knuckles->position -= movementSpeed * right;
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_D) == GLFW_PRESS)
         {
-            cameraPosition += normalize(cross(cameraFront, cameraUp)) * movementSpeed;
+            scene.knuckles->position += movementSpeed * right;
         }
-        if (glfwGetKey(WindowIn, GLFW_KEY_SPACE) == GLFW_PRESS)
+        if (glfwGetKey(WindowIn, GLFW_KEY_SPACE) == GLFW_PRESS && scene.knuckles->isGrounded )
         {
-            cameraPosition += cameraUp * movementSpeed;
-        }
-        if (glfwGetKey(WindowIn, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS)
-        {
-            cameraPosition -= cameraUp * movementSpeed;
-        }
-
-        if (glfwGetKey(WindowIn, GLFW_KEY_MINUS) == GLFW_PRESS && !fogUp)
-        {
-            scene.fogScale += 0.1f;
-            std::cout << scene.fogScale << std::endl;
-            fogUp = true;
-        }
-        else if (glfwGetKey(WindowIn, GLFW_KEY_MINUS) == GLFW_RELEASE && fogUp)
-        {
-            fogUp = false;
-        }
-        if (glfwGetKey(WindowIn, GLFW_KEY_EQUAL) == GLFW_PRESS && scene.fogScale < 100.0f && scene.fogScale > 0.0f && !fogDown)
-        {
-            scene.fogScale -= 0.1f;
-            fogDown = true;
-        }
-        else if (glfwGetKey(WindowIn, GLFW_KEY_EQUAL) == GLFW_RELEASE && fogDown)
-        {
-            fogDown = false;
-        }
-        if (glfwGetKey(WindowIn, GLFW_KEY_E) == GLFW_PRESS && !edgeDetectionDown)
-        {
-            edgeDetectionDown = true;
-            scene.edgeDetection = !scene.edgeDetection;
-        }
-        else if (glfwGetKey(WindowIn, GLFW_KEY_E) == GLFW_RELEASE && edgeDetectionDown)
-        {
-            edgeDetectionDown = false;
+            scene.knuckles->velocity += glm::vec3(0, 6, 0);
         }
     }
 };

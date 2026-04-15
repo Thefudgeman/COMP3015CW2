@@ -1,7 +1,19 @@
 #pragma once
 
 #include <glm/glm.hpp>
-
+#include <iostream>
+#include <glad/glad.h>
+#include "helper/glslprogram.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "helper/plane.h"
+#include "helper/objmesh.h"
+#include "helper/torus.h"
+#include "helper/teapot.h"
+#include "helper/cube.h"
+#include "helper/texture.h"
+#include "helper/skybox.h"
+#include "helper/frustum.h"
 class Scene
 {
 protected:
@@ -9,10 +21,13 @@ protected:
 
 public:
     float fogScale = 1.0f;
-    bool edgeDetection = true;
     int width;
     int height;
     glm::mat4 view;
+    glm::vec3 cameraPosition;
+    std::unique_ptr<ObjMesh> knuckles;
+
+
 	Scene() : m_animate(true), width(1920), height(1080) { }
 	virtual ~Scene() {}
 

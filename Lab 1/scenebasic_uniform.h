@@ -3,18 +3,7 @@
 
 #include "helper/scene.h"
 
-#include <glad/glad.h>
-#include "helper/glslprogram.h"
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include "helper/plane.h"
-#include "helper/objmesh.h"
-#include "helper/torus.h"
-#include "helper/teapot.h"
-#include "helper/cube.h"
-#include "helper/texture.h"
-#include "helper/skybox.h"
-#include "helper/frustum.h"
+
 #include <iostream>
 
 using glm::vec3;
@@ -28,7 +17,9 @@ private:
     Teapot teapot;
     Plane plane;
     std::unique_ptr<ObjMesh> mesh;
-    std::unique_ptr<ObjMesh> knuckles, ogre;
+    
+    std::unique_ptr<ObjMesh> floatingIsland;
+
     Cube cube;
     glm::mat4 rotateModel;
     glm::mat4 barrelModel;
@@ -40,6 +31,8 @@ private:
     int shadowMapWidth, shadowMapHeight;
 
     glm::mat4 lightPV, shadowBias;
+
+    vec3 gravity = vec3(0, -9.81f, 0);
 
     Frustum lightFrustum;
     GLuint depthTex;
@@ -57,11 +50,14 @@ private:
     GLuint knucklesTex = Texture::loadTexture("media/knuckles/AncientUgandan.png");
     GLuint waveTex = Texture::loadTexture("media/texture/water.jpg");
 
+    GLuint floatingIslandTex = Texture::loadTexture("media/FloatingIsland/FloatingIslandTex.png");
+
     float lightAngle, lightRotationSpeed;
     void drawScene();
     void drawFloor();
     void drawSpot(const glm::vec3& pos, float rought, int metal, const glm::vec3& colour);
     bool collision(const Aabb& a, const Aabb& b);
+    void collisionTrue(Aabb groundBbox);
     void compile();
 
 public:
@@ -79,7 +75,7 @@ public:
     void update( float t);
     void render();
     void resize(int, int);
-
+    
     float tPrev = 0.0f;
     float angle = 0.0f;
     float rotSpeed = 0.0f;
