@@ -20,17 +20,17 @@ using glm::vec4;
 
 
 
-SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(30.0f, 30.0f, 200, 2), teapot(14, glm::mat4(1.0f)), torus(1.75f * 0.75f, 0.75f * 0.75f, 50, 50), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), sky(300.0f), shadowMapWidth(512), shadowMapHeight(512)
+SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(300.0f, 300.0f, 200, 2), teapot(14, glm::mat4(1.0f)), torus(1.75f * 0.75f, 0.75f * 0.75f, 50, 50), angle(0.0f), tPrev(0.0f), rotSpeed(glm::pi<float>() / 8.0f), sky(300.0f), shadowMapWidth(512), shadowMapHeight(512)
 {
     mesh = ObjMesh::load("media/pig_triangulated.obj", true);
     knuckles = ObjMesh::load("media/knuckles/AncientUgandan.obj", true);
     floatingIsland = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
     floatingIsland->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
-    floatingIsland->bbox.max -= vec3(3.0f, -1.0f, 1.1f);//right,up,back
+    floatingIsland->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
 
     floatingIsland2 = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
     floatingIsland2->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
-    floatingIsland2->bbox.max -= vec3(3.0f, -1.0f, 1.1f);//right,up,back
+    floatingIsland2->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
 
 }
 
@@ -341,9 +341,6 @@ void SceneBasic_Uniform::collisionTrue(Aabb groundBbox)
     if (knuckles->velocity.y < 0)
     {
         float islandTop = groundBbox.max.y;
-
-        std::cout << knuckles->velocity.y << endl;
-
         knuckles->position.y = islandTop;
 
         knuckles->velocity.y = 0;
