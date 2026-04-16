@@ -112,7 +112,7 @@ void SceneBasic_Uniform::initScene()
     mesh->position = vec3(0, 0, 0);
 
     ISoundEngine* engine = createIrrKlangDevice();
-    engine->play2D("music/Daisuke Ishiwatari, Naoki Hashimoto, Arc System Works - Smell of the Game.mp3", false);
+    engine->play2D("music/Daisuke Ishiwatari, Naoki Hashimoto, Arc System Works - Smell of the Game.mp3", true);
     float x, z;
     rotateModel = mat4(1.0f);
     rotateModel = glm::translate(rotateModel, vec3(0.0f, 0.26f, 0.0f));
