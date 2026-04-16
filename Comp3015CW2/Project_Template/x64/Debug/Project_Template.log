@@ -1,0 +1,4 @@
+﻿  scenebasic_uniform.cpp
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(116,14): warning C4101: 'z': unreferenced local variable
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(116,11): warning C4101: 'x': unreferenced local variable
+  Project_Template.vcxproj -> C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\x64\Debug\Project_Template.exe
