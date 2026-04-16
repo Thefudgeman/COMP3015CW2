@@ -18,7 +18,7 @@ private:
     Plane plane;
     std::unique_ptr<ObjMesh> mesh;
     
-    std::unique_ptr<ObjMesh> floatingIsland, floatingIsland2;
+    std::unique_ptr<ObjMesh> floatingIsland, floatingIsland2, floatingIsland3, floatingIsland4, floatingIsland5;
 
     Cube cube;
     glm::mat4 rotateModel;

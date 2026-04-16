@@ -24,7 +24,7 @@ public:
     int width;
     int height;
     glm::mat4 view;
-    glm::vec3 cameraPosition = glm::vec3(0,2,0);
+    glm::vec3 cameraPosition = glm::vec3(0,-48,0);
     std::unique_ptr<ObjMesh> knuckles;
 
 

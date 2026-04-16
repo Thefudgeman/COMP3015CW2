@@ -32,6 +32,18 @@ SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(300.0f, 300.0f, 200, 2
     floatingIsland2->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
     floatingIsland2->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
 
+    floatingIsland3 = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
+    floatingIsland3->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
+    floatingIsland3->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
+
+    floatingIsland4 = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
+    floatingIsland4->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
+    floatingIsland4->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
+
+    floatingIsland5 = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
+    floatingIsland5->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
+    floatingIsland5->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
+
 }
 
 void SceneBasic_Uniform::initScene()
@@ -75,11 +87,25 @@ void SceneBasic_Uniform::initScene()
 
 
     knuckles->position = cameraPosition;
-    floatingIsland->position = vec3(0);
+    floatingIsland->position = vec3(0, -50, 0);
+    floatingIsland->bbox.min += vec3(0, -50, 0);
+    floatingIsland->bbox.max += vec3(0, -50, 0);
 
-    floatingIsland2->position = vec3(1, 1, 0);
-    floatingIsland2->bbox.min += vec3(1, 1, 0);
-    floatingIsland2->bbox.max += vec3(1, 1, 0);
+    floatingIsland2->position = vec3(3, -49, 0);
+    floatingIsland2->bbox.min += vec3(3, -49, 0);
+    floatingIsland2->bbox.max += vec3(3, -49, 0);
+
+    floatingIsland3->position = vec3(3, -47.5, 2);
+    floatingIsland3->bbox.min += vec3(3, -47.5, 2);
+    floatingIsland3->bbox.max += vec3(3, -47.5, 2);
+
+    floatingIsland4->position = vec3(5, -46, 3);
+    floatingIsland4->bbox.min += vec3(5, -46, 3);
+    floatingIsland4->bbox.max += vec3(5, -46, 3);
+
+    floatingIsland5->position = vec3(2, -44.5, 4);
+    floatingIsland5->bbox.min += vec3(2, -44.5, 4);
+    floatingIsland5->bbox.max += vec3(2, -44.5, 4);
 
 
     mesh->position = vec3(0, 0, 0);
@@ -127,9 +153,9 @@ void SceneBasic_Uniform::update(float t)
 {
     //update your angle here
 
-    if (knuckles->position.y < -2.0f)
+    if (knuckles->position.y < -52.0f)
     {
-        knuckles->position = vec3(0, 2, 0);
+        knuckles->position = vec3(0, -48, 0);
     }
 
     float deltaT = t - tPrev;
@@ -169,6 +195,11 @@ void SceneBasic_Uniform::update(float t)
 
     bool belowfloatingIsland2 = knuckles->position.y < floatingIsland2->bbox.max.y && knuckles->position.y > floatingIsland2->bbox.max.y - 0.2f;
 
+    bool belowfloatingIsland3 = knuckles->position.y < floatingIsland3->bbox.max.y && knuckles->position.y > floatingIsland3->bbox.max.y - 0.2f;
+
+    bool belowfloatingIsland4 = knuckles->position.y < floatingIsland4->bbox.max.y && knuckles->position.y > floatingIsland4->bbox.max.y - 0.2f;
+
+    bool belowfloatingIsland5 = knuckles->position.y < floatingIsland5->bbox.max.y && knuckles->position.y > floatingIsland5->bbox.max.y - 0.2f;
 
 
     if (collision(floatingIsland->bbox, yBBox) && belowfloatingIsland)
@@ -179,6 +210,18 @@ void SceneBasic_Uniform::update(float t)
     else if (collision(floatingIsland2->bbox, yBBox) && belowfloatingIsland2)
     {
         collisionTrue(floatingIsland2->bbox);
+    }
+    else if (collision(floatingIsland3->bbox, yBBox) && belowfloatingIsland3)
+    {
+        collisionTrue(floatingIsland3->bbox);
+    }
+    else if (collision(floatingIsland4->bbox, yBBox) && belowfloatingIsland4)
+    {
+        collisionTrue(floatingIsland4->bbox);
+    }
+    else if (collision(floatingIsland5->bbox, yBBox) && belowfloatingIsland5)
+    {
+        collisionTrue(floatingIsland5->bbox);
     }
     else
     {
@@ -257,6 +300,15 @@ void SceneBasic_Uniform::drawScene()
     drawSpot(floatingIsland2->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
     floatingIsland2->render();
 
+    drawSpot(floatingIsland3->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    floatingIsland3->render();
+
+    drawSpot(floatingIsland4->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    floatingIsland4->render();
+
+    drawSpot(floatingIsland5->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    floatingIsland5->render();
+
     cameraPosition = knuckles->position;
 
 
@@ -281,7 +333,7 @@ void SceneBasic_Uniform::drawFloor()
     animShader.setUniform("Material.Rough", 0.9f);
     animShader.setUniform("Material.Metal", 0);
     animShader.setUniform("Material.Color", vec3(0.2f));
-    model = glm::translate(model, vec3(0.0f, -0.75f, 0.0f));
+    model = glm::translate(model, vec3(0.0f, -50.0f, 0.0f));
 
     setAnimMatrices();
     plane.render();
