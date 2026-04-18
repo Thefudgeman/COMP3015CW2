@@ -229,7 +229,7 @@ private:
         //WASD controls
         if (glfwGetKey(WindowIn, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
-            movementSpeed *= 2.0f;
+            movementSpeed *= 1.5f;
         }
 
 

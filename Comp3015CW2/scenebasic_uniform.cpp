@@ -45,6 +45,14 @@ SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(300.0f, 300.0f, 200, 2
     floatingIsland5->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
     floatingIsland5->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
 
+    pathFloatingIsland = ObjMesh::load("media/BlankFloatingIsland/model.obj", true); //this model will be at 3x scale
+    pathFloatingIsland->bbox.min -= vec3(-1.0f, -1.0f, 0.3f);//left,down,forward
+    pathFloatingIsland->bbox.max += vec3(-1.0f, 2.0f, 0.3f);//right,up,back
+
+    blankFloatingIsland = ObjMesh::load("media/Island/model.obj", true);
+    blankFloatingIsland->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
+    blankFloatingIsland->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
+
 }
 
 void SceneBasic_Uniform::initScene()
@@ -91,23 +99,32 @@ void SceneBasic_Uniform::initScene()
     floatingIsland->position = vec3(0, -50, 0);
     floatingIsland->bbox.min += vec3(0, -50, 0);
     floatingIsland->bbox.max += vec3(0, -50, 0);
+  //  floatingIsland->bbox.min *= 2.0f;
+   // floatingIsland->bbox.max *= 2.0f;
 
-    floatingIsland2->position = vec3(3, -49, 0);
-    floatingIsland2->bbox.min += vec3(3, -49, 0);
-    floatingIsland2->bbox.max += vec3(3, -49, 0);
+    floatingIsland2->position = vec3(4, -49, 0);
+    floatingIsland2->bbox.min += vec3(4, -49, 0);
+    floatingIsland2->bbox.max += vec3(4, -49, 0);
 
     floatingIsland3->position = vec3(3, -47.5, 2);
     floatingIsland3->bbox.min += vec3(3, -47.5, 2);
     floatingIsland3->bbox.max += vec3(3, -47.5, 2);
 
-    floatingIsland4->position = vec3(5, -46, 3);
-    floatingIsland4->bbox.min += vec3(5, -46, 3);
-    floatingIsland4->bbox.max += vec3(5, -46, 3);
+    floatingIsland4->position = vec3(5, -46, 6);
+    floatingIsland4->bbox.min += vec3(5, -46, 6);
+    floatingIsland4->bbox.max += vec3(5, -46, 6);
 
     floatingIsland5->position = vec3(2, -44.5, 4);
     floatingIsland5->bbox.min += vec3(2, -44.5, 4);
     floatingIsland5->bbox.max += vec3(2, -44.5, 4);
 
+    pathFloatingIsland->position = vec3(-1, -44, 9);
+    pathFloatingIsland->bbox.min += vec3(-1, -44, 9);
+    pathFloatingIsland->bbox.max += vec3(-1, -44, 9);
+
+    blankFloatingIsland->position = vec3(-1, -44, 0);
+    blankFloatingIsland->bbox.min += vec3(-1, -44, 0);
+    blankFloatingIsland->bbox.max += vec3(-1, -44, 0);
 
     mesh->position = vec3(0, 0, 0);
 
@@ -154,7 +171,7 @@ void SceneBasic_Uniform::update(float t)
 
     if (knuckles->position.y < -52.0f)
     {
-        knuckles->position = vec3(0, -48, 0);
+        knuckles->position = vec3(0, -40, 0);
     }
 
     float deltaT = t - tPrev;
@@ -200,6 +217,10 @@ void SceneBasic_Uniform::update(float t)
 
     bool belowfloatingIsland5 = knuckles->position.y < floatingIsland5->bbox.max.y && knuckles->position.y > floatingIsland5->bbox.max.y - 0.2f;
 
+    bool belowpathFloatingIsland = knuckles->position.y < pathFloatingIsland->bbox.max.y && knuckles->position.y > pathFloatingIsland->bbox.max.y - 0.2f;
+    
+    bool belowblankFloatingIsland = knuckles->position.y < blankFloatingIsland->bbox.max.y && knuckles->position.y > blankFloatingIsland->bbox.max.y - 0.2f;
+
 
     if (collision(floatingIsland->bbox, yBBox) && belowfloatingIsland)
     {
@@ -222,6 +243,14 @@ void SceneBasic_Uniform::update(float t)
     {
         collisionTrue(floatingIsland5->bbox);
     }
+    else if (collision(pathFloatingIsland->bbox, yBBox) && belowpathFloatingIsland)
+    {
+        collisionTrue(pathFloatingIsland->bbox);
+    }
+    else if (collision(blankFloatingIsland->bbox, yBBox) && belowblankFloatingIsland)
+    {
+        collisionTrue(blankFloatingIsland->bbox);
+    }
     else
     {
         knuckles->position.y = newY;
@@ -232,6 +261,9 @@ void SceneBasic_Uniform::update(float t)
     knuckles->bbox.min.y = knuckles->position.y;
     knuckles->bbox.max.y = knuckles->position.y + height;
 
+    std::cout << blankFloatingIsland->bbox.max.y << " " << blankFloatingIsland->position.y << " " << blankFloatingIsland->bbox.min.y << endl;
+    std::cout << blankFloatingIsland->bbox.max.z << " " << blankFloatingIsland->position.z << " " << blankFloatingIsland->bbox.min.z << endl;
+    std::cout << blankFloatingIsland->bbox.max.x << " " << blankFloatingIsland->position.x << " " << blankFloatingIsland->bbox.min.x << endl;
 
     //  floatingIsland->bbox.min.y = floatingIsland->position.y;
     //  floatingIsland->bbox.max.y = floatingIsland->position.y + floatingIsland->bbox.max.y - floatingIsland->bbox.min.y;
@@ -253,7 +285,7 @@ void SceneBasic_Uniform::drawScene()
 {
     vec4 lightPos = vec4(15.0f, 1.0f, 15.0f, 1.0f);
 
-
+    glDisable(GL_CULL_FACE);
     skyBoxShader.use();
 
     glActiveTexture(GL_TEXTURE0);
@@ -282,31 +314,41 @@ void SceneBasic_Uniform::drawScene()
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, cement);
-    drawSpot(mesh->position, metalRough, 1, vec3(1, 0.71f, 0.29f));
+    drawSpot(mesh->position, metalRough, 1, vec3(1, 0.71f, 0.29f), 1.0f);
     mesh->render();
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, knucklesTex);
-    drawSpot(knuckles->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    drawSpot(knuckles->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 1.0f);
     // knuckles->render();
 
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, floatingIslandTex);
-    drawSpot(floatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    drawSpot(floatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 1.0f);
     floatingIsland->render();
 
-    drawSpot(floatingIsland2->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    drawSpot(floatingIsland2->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 1.0f);
     floatingIsland2->render();
 
-    drawSpot(floatingIsland3->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    drawSpot(floatingIsland3->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 1.0f);
     floatingIsland3->render();
 
-    drawSpot(floatingIsland4->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    drawSpot(floatingIsland4->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 1.0f);
     floatingIsland4->render();
 
-    drawSpot(floatingIsland5->position, 0.0f, 0, vec3(1, 0.71f, 0.29f));
+    drawSpot(floatingIsland5->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 1.0f);
     floatingIsland5->render();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, pathFloatingIslandTex);
+    drawSpot(pathFloatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 3.0f);
+    pathFloatingIsland->render();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, blankFloatingIslandTex);
+    drawSpot(blankFloatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
+    blankFloatingIsland->render();
 
     cameraPosition = knuckles->position;
 
@@ -314,13 +356,15 @@ void SceneBasic_Uniform::drawScene()
 }
 
 
-void SceneBasic_Uniform::drawSpot(const vec3& pos, float rough, int metal, const vec3& colour)
+void SceneBasic_Uniform::drawSpot(const vec3& pos, float rough, int metal, const vec3& colour, float scale)
 {
     model = mat4(1.0f);
     prog.setUniform("Material.Rough", rough);
     prog.setUniform("Material.Metal", metal);
     prog.setUniform("Matherial.Color", colour);
     model = glm::translate(model, pos);
+    model = glm::scale(model, vec3(scale));
+
     model = glm::rotate(model, glm::radians(180.0f), vec3(0.0f, 1.0f, 0.0f));
 
     setMatrices();

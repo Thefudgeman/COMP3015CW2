@@ -19,6 +19,9 @@ private:
     std::unique_ptr<ObjMesh> mesh;
     
     std::unique_ptr<ObjMesh> floatingIsland, floatingIsland2, floatingIsland3, floatingIsland4, floatingIsland5;
+    std::unique_ptr<ObjMesh> pathFloatingIsland;
+    std::unique_ptr<ObjMesh> blankFloatingIsland;
+
 
     Cube cube;
     glm::mat4 rotateModel;
@@ -52,10 +55,15 @@ private:
 
     GLuint floatingIslandTex = Texture::loadTexture("media/FloatingIsland/FloatingIslandTex.png");
 
+    GLuint pathFloatingIslandTex = Texture::loadTexture("media/BlankFloatingIsland/tex.png");
+
+    GLuint blankFloatingIslandTex = Texture::loadTexture("media/Island/DefaultMaterial_Base_color.png");
+
+
     float lightAngle, lightRotationSpeed;
     void drawScene();
     void drawFloor();
-    void drawSpot(const glm::vec3& pos, float rought, int metal, const glm::vec3& colour);
+    void drawSpot(const glm::vec3& pos, float rought, int metal, const glm::vec3& colour, float scale);
     bool collision(const Aabb& a, const Aabb& b);
     void collisionTrue(Aabb groundBbox);
     void compile();
