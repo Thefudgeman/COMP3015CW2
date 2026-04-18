@@ -11,7 +11,9 @@
 #include <fstream>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include "irrklang/include/irrKlang.h"
 
+using namespace irrklang;
 //using glm::vec3;
 
 //Transformations
@@ -35,6 +37,10 @@ float cameraLastYPos = 600.0f / 2.0f;
 float deltaTime = 0.0f;
 //Last value of time change
 float lastFrame = 0.0f;
+
+ISoundEngine* footsteps = createIrrKlangDevice();
+ISound* sound = footsteps->play2D("music/Running.mp3", true, true, true);
+
 
 bool fogUp, fogDown, edgeDetectionDown = false;
 
@@ -225,11 +231,11 @@ private:
         }
 
         //Extent to which to move in one instance
-        float movementSpeed = 3.0f * deltaTime;
+        float movementSpeed = 400.0f * deltaTime;
         //WASD controls
         if (glfwGetKey(WindowIn, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
         {
-            movementSpeed *= 1.5f;
+            movementSpeed *= 2.0f;
         }
 
 
@@ -239,27 +245,50 @@ private:
 
         glm::vec3 right = normalize(cross(forward, cameraUp));
 
+        scene.knuckles->velocity.z = 0;
+        scene.knuckles->velocity.x = 0;
+
         // Movement
         if (glfwGetKey(WindowIn, GLFW_KEY_W) == GLFW_PRESS)
         {
-            scene.knuckles->position += movementSpeed * forward;
+            scene.knuckles->velocity += movementSpeed * forward;
+            if (sound->getIsPaused())
+            {
+                sound->setIsPaused(false);
+            }
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_S) == GLFW_PRESS)
         {
-            scene.knuckles->position -= movementSpeed * forward;
+            scene.knuckles->velocity += movementSpeed * -forward;
+            if (sound->getIsPaused())
+            {
+                sound->setIsPaused(false);
+            }
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_A) == GLFW_PRESS)
         {
-            scene.knuckles->position -= movementSpeed * right;
-
+            scene.knuckles->velocity += movementSpeed * -right;
+            if (sound->getIsPaused())
+            {
+                sound->setIsPaused(false);
+            }
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_D) == GLFW_PRESS)
         {
-            scene.knuckles->position += movementSpeed * right;
+            scene.knuckles->velocity += movementSpeed * right;
+            if (sound->getIsPaused())
+            {
+                sound->setIsPaused(false);
+            }
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_SPACE) == GLFW_PRESS && scene.knuckles->isGrounded)
         {
-            scene.knuckles->velocity.y +=  6.0f;           
+            scene.knuckles->velocity.y +=  6.0f;   
+            scene.knuckles->jumping = true;
+        }
+        if (scene.knuckles->jumping || (scene.knuckles->velocity.x == 0 && scene.knuckles->velocity.z == 0))
+        {
+            sound->setIsPaused(true);
         }
     }
 };

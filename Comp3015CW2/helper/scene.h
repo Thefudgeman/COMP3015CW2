@@ -24,7 +24,7 @@ public:
     int width;
     int height;
     glm::mat4 view;
-    glm::vec3 cameraPosition = glm::vec3(0,-40,0);
+    glm::vec3 cameraPosition = glm::vec3(0,-48,0);
     std::unique_ptr<ObjMesh> knuckles;
 
 
@@ -45,7 +45,7 @@ public:
       This is called prior to every frame.  Use this
       to update your animation.
       */
-    virtual void update( float t ) = 0;
+    virtual void update( float t) = 0;
 
     /**
       Draw your scene.

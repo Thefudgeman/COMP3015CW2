@@ -12,7 +12,7 @@ using std::cerr;
 using std::endl;
 #include "helper/glutils.h"
 #include "helper/aabb.h"
-#include "irrklang/include/irrKlang.h"
+
 
 using glm::mat4;
 using glm::vec3;
@@ -53,6 +53,18 @@ SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(300.0f, 300.0f, 200, 2
     blankFloatingIsland->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
     blankFloatingIsland->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
 
+    blankFloatingIsland2 = ObjMesh::load("media/Island/model.obj", true);
+    blankFloatingIsland2->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
+    blankFloatingIsland2->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
+
+    blankFloatingIsland3 = ObjMesh::load("media/Island/model.obj", true);
+    blankFloatingIsland3->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
+    blankFloatingIsland3->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
+
+    blankFloatingIsland4 = ObjMesh::load("media/Island/model.obj", true);
+    blankFloatingIsland4->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
+    blankFloatingIsland4->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
+
 }
 
 void SceneBasic_Uniform::initScene()
@@ -69,28 +81,28 @@ void SceneBasic_Uniform::initScene()
 
 
     angle = glm::half_pi<float>();
-    vec4 lightPos = vec4(15.0f, 10.0f, 10.0f, 1.0f);
+    vec4 lightPos = vec4(15.0f, 100.0f, 10.0f, 1.0f);
 
     lightAngle = 0.0f;
     lightRotationSpeed = 1.5f;
     prog.use();
-    prog.setUniform("Light[0].L", vec3(45.0f));
+    prog.setUniform("Light[0].L", vec3(45.0f)*50.0f);
     prog.setUniform("Light[0].Position", view * lightPos);
 
-    prog.setUniform("Light[1].L", vec3(0.3f));
+    prog.setUniform("Light[1].L", vec3(0.3f) * 50.0f);
     prog.setUniform("Light[1].Position", view * lightPos);
 
-    prog.setUniform("Light[2].L", vec3(45.0f));
+    prog.setUniform("Light[2].L", vec3(45.0f) * 50.0f);
     prog.setUniform("Light[2].Position", view * lightPos);
 
     animShader.use();
-    animShader.setUniform("Light[0].L", vec3(45.0f));
+    animShader.setUniform("Light[0].L", vec3(45.0f) * 50.0f);
     animShader.setUniform("Light[0].Position", view * lightPos);
 
-    animShader.setUniform("Light[1].L", vec3(0.3f));
+    animShader.setUniform("Light[1].L", vec3(0.3f) * 50.0f);
     animShader.setUniform("Light[1].Position", view * lightPos);
 
-    animShader.setUniform("Light[2].L", vec3(45.0f));
+    animShader.setUniform("Light[2].L", vec3(45.0f) * 50.0f);
     animShader.setUniform("Light[2].Position", view * lightPos);
 
 
@@ -99,8 +111,6 @@ void SceneBasic_Uniform::initScene()
     floatingIsland->position = vec3(0, -50, 0);
     floatingIsland->bbox.min += vec3(0, -50, 0);
     floatingIsland->bbox.max += vec3(0, -50, 0);
-  //  floatingIsland->bbox.min *= 2.0f;
-   // floatingIsland->bbox.max *= 2.0f;
 
     floatingIsland2->position = vec3(4, -49, 0);
     floatingIsland2->bbox.min += vec3(4, -49, 0);
@@ -122,14 +132,26 @@ void SceneBasic_Uniform::initScene()
     pathFloatingIsland->bbox.min += vec3(-1, -44, 9);
     pathFloatingIsland->bbox.max += vec3(-1, -44, 9);
 
-    blankFloatingIsland->position = vec3(-1, -44, 0);
-    blankFloatingIsland->bbox.min += vec3(-1, -44, 0);
-    blankFloatingIsland->bbox.max += vec3(-1, -44, 0);
+    blankFloatingIsland->position = vec3(-2, -42, 15);
+    blankFloatingIsland->bbox.min += vec3(-2, -42, 15);
+    blankFloatingIsland->bbox.max += vec3(-2, -42, 15);
+
+    blankFloatingIsland2->position = vec3(-4, -40.5, 18);
+    blankFloatingIsland2->bbox.min += vec3(-4, -40.5, 18);
+    blankFloatingIsland2->bbox.max += vec3(-4, -40.5, 18);
+
+    blankFloatingIsland3->position = vec3(-9, -39, 18);
+    blankFloatingIsland3->bbox.min += vec3(-9, -39, 18);
+    blankFloatingIsland3->bbox.max += vec3(-9, -39, 18);
+
+    blankFloatingIsland4->position = vec3(-13, -20, 18);
+    blankFloatingIsland4->bbox.min += vec3(-13, -20, 18);
+    blankFloatingIsland4->bbox.max += vec3(-13, -20, 18);
 
     mesh->position = vec3(0, 0, 0);
 
-    ISoundEngine* engine = createIrrKlangDevice();
-    engine->play2D("music/Daisuke Ishiwatari, Naoki Hashimoto, Arc System Works - Smell of the Game.mp3", true);
+  //  ISoundEngine* engine = createIrrKlangDevice();
+   // engine->play2D("music/Daisuke Ishiwatari, Naoki Hashimoto, Arc System Works - Smell of the Game.mp3", true);
     float x, z;
     rotateModel = mat4(1.0f);
     rotateModel = glm::translate(rotateModel, vec3(0.0f, 0.26f, 0.0f));
@@ -169,9 +191,17 @@ void SceneBasic_Uniform::update(float t)
 {
     //update your angle here
 
-    if (knuckles->position.y < -52.0f)
+    if (knuckles->position.y < -50.0f)
     {
-        knuckles->position = vec3(0, -40, 0);
+        if (splashNoise->getIsPaused())
+        {
+            splashNoise->setIsPaused(false);
+        }
+        if (knuckles->position.y < -52)
+        {
+            knuckles->position = vec3(0, -48, 0);
+
+        }
     }
 
     float deltaT = t - tPrev;
@@ -221,11 +251,23 @@ void SceneBasic_Uniform::update(float t)
     
     bool belowblankFloatingIsland = knuckles->position.y < blankFloatingIsland->bbox.max.y && knuckles->position.y > blankFloatingIsland->bbox.max.y - 0.2f;
 
+    bool belowblankFloatingIsland2 = knuckles->position.y < blankFloatingIsland2->bbox.max.y && knuckles->position.y > blankFloatingIsland2->bbox.max.y - 0.2f;
+
+    bool belowblankFloatingIsland3 = knuckles->position.y < blankFloatingIsland3->bbox.max.y && knuckles->position.y > blankFloatingIsland3->bbox.max.y - 0.2f;
+
+    bool belowblankFloatingIsland4 = knuckles->position.y < blankFloatingIsland4->bbox.max.y && knuckles->position.y > blankFloatingIsland4->bbox.max.y - 0.2f;
+
+
+
+
+
 
     if (collision(floatingIsland->bbox, yBBox) && belowfloatingIsland)
     {
 
         collisionTrue(floatingIsland->bbox);
+        std::cout << knuckles->isGrounded << endl;
+
     }
     else if (collision(floatingIsland2->bbox, yBBox) && belowfloatingIsland2)
     {
@@ -251,19 +293,33 @@ void SceneBasic_Uniform::update(float t)
     {
         collisionTrue(blankFloatingIsland->bbox);
     }
+    else if (collision(blankFloatingIsland2->bbox, yBBox) && belowblankFloatingIsland2)
+    {
+        collisionTrue(blankFloatingIsland2->bbox);
+    }
+    else if (collision(blankFloatingIsland3->bbox, yBBox) && belowblankFloatingIsland3)
+    {
+        collisionTrue(blankFloatingIsland3->bbox);
+        knuckles->velocity = vec3(0, 20, 0);
+        knuckles->jumping = true;
+    }
+    else if (collision(blankFloatingIsland4->bbox, yBBox) && belowblankFloatingIsland4)
+    {
+        collisionTrue(blankFloatingIsland4->bbox);
+    }
     else
     {
         knuckles->position.y = newY;
         knuckles->isGrounded = false;
     }
+
+    knuckles->position.z += knuckles->velocity.z * deltaT;
+    knuckles->position.x += knuckles->velocity.x * deltaT;
+
     float height = knuckles->bbox.max.y - knuckles->bbox.min.y;
 
     knuckles->bbox.min.y = knuckles->position.y;
     knuckles->bbox.max.y = knuckles->position.y + height;
-
-    std::cout << blankFloatingIsland->bbox.max.y << " " << blankFloatingIsland->position.y << " " << blankFloatingIsland->bbox.min.y << endl;
-    std::cout << blankFloatingIsland->bbox.max.z << " " << blankFloatingIsland->position.z << " " << blankFloatingIsland->bbox.min.z << endl;
-    std::cout << blankFloatingIsland->bbox.max.x << " " << blankFloatingIsland->position.x << " " << blankFloatingIsland->bbox.min.x << endl;
 
     //  floatingIsland->bbox.min.y = floatingIsland->position.y;
     //  floatingIsland->bbox.max.y = floatingIsland->position.y + floatingIsland->bbox.max.y - floatingIsland->bbox.min.y;
@@ -283,8 +339,6 @@ void SceneBasic_Uniform::render()
 
 void SceneBasic_Uniform::drawScene()
 {
-    vec4 lightPos = vec4(15.0f, 1.0f, 15.0f, 1.0f);
-
     glDisable(GL_CULL_FACE);
     skyBoxShader.use();
 
@@ -349,6 +403,15 @@ void SceneBasic_Uniform::drawScene()
     glBindTexture(GL_TEXTURE_2D, blankFloatingIslandTex);
     drawSpot(blankFloatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
     blankFloatingIsland->render();
+
+    drawSpot(blankFloatingIsland2->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
+    blankFloatingIsland2->render();
+
+    drawSpot(blankFloatingIsland3->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
+    blankFloatingIsland3->render();
+
+    drawSpot(blankFloatingIsland4->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
+    blankFloatingIsland4->render();
 
     cameraPosition = knuckles->position;
 
@@ -435,6 +498,13 @@ void SceneBasic_Uniform::collisionTrue(Aabb groundBbox)
 {
     if (knuckles->velocity.y < 0)
     {
+        
+        if (knuckles->jumping && knuckles->velocity.y < -7.0f)
+        {
+            ISoundEngine* JumpLandingSound = createIrrKlangDevice();
+           JumpLandingSound->play2D("music/JumpLanding.mp3", false);
+        }
+        knuckles->jumping = false;
         float islandTop = groundBbox.max.y;
         knuckles->position.y = islandTop;
 

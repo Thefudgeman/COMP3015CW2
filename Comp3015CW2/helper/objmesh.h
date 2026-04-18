@@ -27,6 +27,7 @@ public:
     glm::vec3 hitBox = glm::vec3(0, 0, 0);
     Aabb bbox;
     bool isGrounded;
+    bool jumping;
 
 protected:
     ObjMesh();

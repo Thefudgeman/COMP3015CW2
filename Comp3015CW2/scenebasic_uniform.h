@@ -2,12 +2,13 @@
 #define SCENEBASIC_UNIFORM_H
 
 #include "helper/scene.h"
+#include "irrklang/include/irrKlang.h"
 
 
 #include <iostream>
 
 using glm::vec3;
-
+using namespace irrklang;
 class SceneBasic_Uniform : public Scene
 {
 private:
@@ -20,7 +21,7 @@ private:
     
     std::unique_ptr<ObjMesh> floatingIsland, floatingIsland2, floatingIsland3, floatingIsland4, floatingIsland5;
     std::unique_ptr<ObjMesh> pathFloatingIsland;
-    std::unique_ptr<ObjMesh> blankFloatingIsland;
+    std::unique_ptr<ObjMesh> blankFloatingIsland, blankFloatingIsland2, blankFloatingIsland3, blankFloatingIsland4;
 
 
     Cube cube;
@@ -59,6 +60,8 @@ private:
 
     GLuint blankFloatingIslandTex = Texture::loadTexture("media/Island/DefaultMaterial_Base_color.png");
 
+    ISoundEngine* splash = createIrrKlangDevice();
+    ISound* splashNoise = splash->play2D("music/Splash.mp3", false, true);
 
     float lightAngle, lightRotationSpeed;
     void drawScene();
