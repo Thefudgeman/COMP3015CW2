@@ -107,6 +107,8 @@ public:
         scene.initScene();
         scene.resize(fbw, fbh);
 
+        footsteps->setSoundVolume(1.0);
+
         // Enter the main loop
         mainLoop(window, scene);
 
@@ -252,7 +254,7 @@ private:
         if (glfwGetKey(WindowIn, GLFW_KEY_W) == GLFW_PRESS)
         {
             scene.knuckles->velocity += movementSpeed * forward;
-            if (sound->getIsPaused())
+            if (sound->getIsPaused() && scene.knuckles->velocity.y == 0)
             {
                 sound->setIsPaused(false);
             }
@@ -260,7 +262,7 @@ private:
         if (glfwGetKey(WindowIn, GLFW_KEY_S) == GLFW_PRESS)
         {
             scene.knuckles->velocity += movementSpeed * -forward;
-            if (sound->getIsPaused())
+            if (sound->getIsPaused() && scene.knuckles->velocity.y == 0)
             {
                 sound->setIsPaused(false);
             }
@@ -268,7 +270,7 @@ private:
         if (glfwGetKey(WindowIn, GLFW_KEY_A) == GLFW_PRESS)
         {
             scene.knuckles->velocity += movementSpeed * -right;
-            if (sound->getIsPaused())
+            if (sound->getIsPaused() && scene.knuckles->velocity.y == 0)
             {
                 sound->setIsPaused(false);
             }
@@ -276,7 +278,7 @@ private:
         if (glfwGetKey(WindowIn, GLFW_KEY_D) == GLFW_PRESS)
         {
             scene.knuckles->velocity += movementSpeed * right;
-            if (sound->getIsPaused())
+            if (sound->getIsPaused() && scene.knuckles->velocity.y == 0)
             {
                 sound->setIsPaused(false);
             }
@@ -286,7 +288,7 @@ private:
             scene.knuckles->velocity.y +=  6.0f;   
             scene.knuckles->jumping = true;
         }
-        if (scene.knuckles->jumping || (scene.knuckles->velocity.x == 0 && scene.knuckles->velocity.z == 0))
+        if (scene.knuckles->jumping || (scene.knuckles->velocity.x == 0 && scene.knuckles->velocity.z == 0) || scene.knuckles->velocity.y < -1)
         {
             sound->setIsPaused(true);
         }

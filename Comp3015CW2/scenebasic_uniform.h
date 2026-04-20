@@ -23,6 +23,10 @@ private:
     std::unique_ptr<ObjMesh> pathFloatingIsland;
     std::unique_ptr<ObjMesh> blankFloatingIsland, blankFloatingIsland2, blankFloatingIsland3, blankFloatingIsland4;
 
+    ISoundEngine* JumpLandingSound = createIrrKlangDevice();
+    ISoundEngine* engine = createIrrKlangDevice();
+
+
 
     Cube cube;
     glm::mat4 rotateModel;
