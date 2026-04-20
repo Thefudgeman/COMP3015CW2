@@ -34,7 +34,7 @@ SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(300.0f, 300.0f, 200, 2
     floatingIsland2->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
 
     floatingIsland3 = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
-    floatingIsland3->bbox.min += vec3(3.0f, -0.0f, 1.8f);//left,down,forward
+    floatingIsland3->bbox.min += vec3(3.0f, -1.0f, 1.8f);//left,down,forward
     floatingIsland3->bbox.max -= vec3(3.0f, -1.0f, 1.5f);//right,up,back
 
     floatingIsland4 = ObjMesh::load("media/FloatingIsland/FloatingIsland.obj", true);
@@ -81,7 +81,7 @@ void SceneBasic_Uniform::initScene()
 
 
     angle = glm::half_pi<float>();
-    vec4 lightPos = vec4(15.0f, 100.0f, 10.0f, 1.0f);
+    vec4 lightPos = vec4(15.0f, 50.0f, 10.0f, 1.0f);
 
     lightAngle = 0.0f;
     lightRotationSpeed = 1.5f;
@@ -233,8 +233,10 @@ void SceneBasic_Uniform::update(float t)
 
     Aabb yBBox = knuckles->bbox;
     float dy = newY - knuckles->position.y;
+  
+
     yBBox.min.y += dy;
-    yBBox.max.y += dy; 
+    yBBox.max.y += dy;
 
 
     bool belowfloatingIsland = knuckles->position.y < floatingIsland->bbox.max.y && knuckles->position.y > floatingIsland->bbox.max.y -0.2f;
@@ -266,8 +268,6 @@ void SceneBasic_Uniform::update(float t)
     {
 
         collisionTrue(floatingIsland->bbox);
-        std::cout << knuckles->isGrounded << endl;
-
     }
     else if (collision(floatingIsland2->bbox, yBBox) && belowfloatingIsland2)
     {
@@ -362,6 +362,29 @@ void SceneBasic_Uniform::drawScene()
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, waveTex);
     drawFloor();
+
+    vec4 lightPos = vec4(15.0f, 50.0f, 10.0f, 1.0f);
+
+
+    prog.use();
+    prog.setUniform("Light[0].L", vec3(45.0f) * 50.0f);
+    prog.setUniform("Light[0].Position", view * lightPos);
+
+    prog.setUniform("Light[1].L", vec3(0.3f) * 50.0f);
+    prog.setUniform("Light[1].Position", view * lightPos);
+
+    prog.setUniform("Light[2].L", vec3(45.0f) * 50.0f);
+    prog.setUniform("Light[2].Position", view * lightPos);
+
+    animShader.use();
+    animShader.setUniform("Light[0].L", vec3(45.0f) * 50.0f);
+    animShader.setUniform("Light[0].Position", view * lightPos);
+
+    animShader.setUniform("Light[1].L", vec3(0.3f) * 50.0f);
+    animShader.setUniform("Light[1].Position", view * lightPos);
+
+    animShader.setUniform("Light[2].L", vec3(45.0f) * 50.0f);
+    animShader.setUniform("Light[2].Position", view * lightPos);
 
     prog.use();
 
