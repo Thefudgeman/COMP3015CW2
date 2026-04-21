@@ -285,8 +285,11 @@ private:
         }
         if (glfwGetKey(WindowIn, GLFW_KEY_SPACE) == GLFW_PRESS && scene.knuckles->isGrounded)
         {
-            scene.knuckles->velocity.y +=  6.0f;   
-            scene.knuckles->jumping = true;
+            if (scene.knuckles->velocity.y < 6.0f)
+            {
+                scene.knuckles->velocity.y = 6.0f;
+                scene.knuckles->jumping = true;
+            }
         }
         if (scene.knuckles->jumping || (scene.knuckles->velocity.x == 0 && scene.knuckles->velocity.z == 0) || scene.knuckles->velocity.y < -1)
         {

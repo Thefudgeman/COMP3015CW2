@@ -1,6 +1,6 @@
 ﻿  scenebasic_uniform.cpp
-C:\Users\tbutler3\Downloads\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(153,28): warning C4305: 'argument': truncation from 'double' to 'irrklang::ik_f32'
-C:\Users\tbutler3\Downloads\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(156,28): warning C4305: 'argument': truncation from 'double' to 'irrklang::ik_f32'
-C:\Users\tbutler3\Downloads\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(158,14): warning C4101: 'z': unreferenced local variable
-C:\Users\tbutler3\Downloads\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(158,11): warning C4101: 'x': unreferenced local variable
-  Project_Template.vcxproj -> C:\Users\tbutler3\Downloads\COMP3015CW2\Comp3015CW2\x64\Debug\Project_Template.exe
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(186,29): warning C4305: 'argument': truncation from 'double' to 'irrklang::ik_f32'
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(189,28): warning C4305: 'argument': truncation from 'double' to 'irrklang::ik_f32'
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(191,14): warning C4101: 'z': unreferenced local variable
+C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(191,11): warning C4101: 'x': unreferenced local variable
+  Project_Template.vcxproj -> C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\x64\Debug\Project_Template.exe

@@ -61,9 +61,26 @@ SceneBasic_Uniform::SceneBasic_Uniform() : time(0), plane(300.0f, 300.0f, 200, 2
     blankFloatingIsland3->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
     blankFloatingIsland3->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
 
+    trampoline = ObjMesh::load("media/Trampoline/Trampoline.obj", true);
+    trampoline->bbox.min += vec3(5.5f, 0.0f, 4.1f);//left,down,forward
+    trampoline->bbox.max -= vec3(5.3f, -0.5f, 4.3f);//right,up,back
+
     blankFloatingIsland4 = ObjMesh::load("media/Island/model.obj", true);
     blankFloatingIsland4->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
     blankFloatingIsland4->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
+
+
+    blankFloatingIsland5 = ObjMesh::load("media/Island/model.obj", true);
+    blankFloatingIsland5->bbox.min += vec3(110.2f, 97.0f, 112.8f);//left,down,forward
+    blankFloatingIsland5->bbox.max -= vec3(110.1f, 95.0f, 113.0f);//right,up,back
+
+    finishLine = ObjMesh::load("media/FinishLine/FinishLine.obj", true);
+    finishLine->bbox.min -= vec3(-1.5f, -1.0f, -1.5f);//left,down,forward
+    finishLine->bbox.max += vec3(-1.5f, 1.0f, 0.2f);//right,up,back
+
+    pathFloatingIsland2 = ObjMesh::load("media/BlankFloatingIsland/model.obj", true); //this model will be at 3x scale
+    pathFloatingIsland2->bbox.min -= vec3(-1.0f, -1.0f, 0.3f);//left,down,forward
+    pathFloatingIsland2->bbox.max += vec3(-1.0f, 2.0f, 0.3f);//right,up,back
 
 }
 
@@ -144,17 +161,33 @@ void SceneBasic_Uniform::initScene()
     blankFloatingIsland3->bbox.min += vec3(-9, -39, 18);
     blankFloatingIsland3->bbox.max += vec3(-9, -39, 18);
 
+    trampoline->position = vec3(-9, -38, 18);
+    trampoline->bbox.min += vec3(-9, -38, 18);
+    trampoline->bbox.max += vec3(-9, -38, 18);
+
     blankFloatingIsland4->position = vec3(-13, -20, 18);
     blankFloatingIsland4->bbox.min += vec3(-13, -20, 18);
     blankFloatingIsland4->bbox.max += vec3(-13, -20, 18);
 
+    blankFloatingIsland5->position = vec3(-13, -18.5, 21);
+    blankFloatingIsland5->bbox.min += vec3(-13, -18.5, 21);
+    blankFloatingIsland5->bbox.max += vec3(-13, -18.5, 21);
+
+    pathFloatingIsland2->position = vec3(-13, -18.0, 26);
+    pathFloatingIsland2->bbox.min += vec3(-13, -18.0, 26);
+    pathFloatingIsland2->bbox.max += vec3(-13, -18.0, 26);
+
+    finishLine->position = vec3(-13, -15.5, 28);
+    finishLine->bbox.min += vec3(-13, -15.5, 28);
+    finishLine->bbox.max += vec3(-13, -15.5, 28);
+
     mesh->position = vec3(0, 0, 0);
 
-    splash->setSoundVolume(0.3);
+    soundFX->setSoundVolume(0.3);
 
 
     engine->setSoundVolume(0.05);
-    engine->play2D("music/Daisuke Ishiwatari, Naoki Hashimoto, Arc System Works - Smell of the Game.mp3", true);
+    engine->play2D("music/BackgroundMusic.mp3", true);
     float x, z;
     rotateModel = mat4(1.0f);
     rotateModel = glm::translate(rotateModel, vec3(0.0f, 0.26f, 0.0f));
@@ -210,6 +243,7 @@ void SceneBasic_Uniform::update(float t)
     {
         splashNoise->setIsPaused(true);
 
+
     }
 
     float deltaT = t - tPrev;
@@ -258,6 +292,8 @@ void SceneBasic_Uniform::update(float t)
     bool belowfloatingIsland5 = knuckles->position.y < floatingIsland5->bbox.max.y && knuckles->position.y > floatingIsland5->bbox.max.y - 0.2f;
 
     bool belowpathFloatingIsland = knuckles->position.y < pathFloatingIsland->bbox.max.y && knuckles->position.y > pathFloatingIsland->bbox.max.y - 0.2f;
+
+    bool belowpathFloatingIsland2 = knuckles->position.y < pathFloatingIsland2->bbox.max.y && knuckles->position.y > pathFloatingIsland2->bbox.max.y - 0.2f;
     
     bool belowblankFloatingIsland = knuckles->position.y < blankFloatingIsland->bbox.max.y && knuckles->position.y > blankFloatingIsland->bbox.max.y - 0.2f;
 
@@ -267,10 +303,18 @@ void SceneBasic_Uniform::update(float t)
 
     bool belowblankFloatingIsland4 = knuckles->position.y < blankFloatingIsland4->bbox.max.y && knuckles->position.y > blankFloatingIsland4->bbox.max.y - 0.2f;
 
+    bool belowblankFloatingIsland5 = knuckles->position.y < blankFloatingIsland5->bbox.max.y && knuckles->position.y > blankFloatingIsland5->bbox.max.y - 0.2f;
 
+    bool belowTrampoline = knuckles->position.y < trampoline->bbox.max.y && knuckles->position.y > trampoline->bbox.max.y - 0.2f;
 
-
-
+    if (collision(finishLine->bbox, yBBox))
+    {
+        if (finishMusic->getIsPaused())
+        {
+            std::cout << "Finished" << endl;
+            finishMusic->setIsPaused(false);
+        }
+    }
 
     if (collision(floatingIsland->bbox, yBBox) && belowfloatingIsland)
     {
@@ -308,12 +352,25 @@ void SceneBasic_Uniform::update(float t)
     else if (collision(blankFloatingIsland3->bbox, yBBox) && belowblankFloatingIsland3)
     {
         collisionTrue(blankFloatingIsland3->bbox);
-        knuckles->velocity = vec3(0, 20, 0);
+    }
+    else if (collision(trampoline->bbox, yBBox) && belowTrampoline)
+    {
         knuckles->jumping = true;
+        collisionTrue(trampoline->bbox);
+        knuckles->velocity = vec3(0, 20, 0);
+        
     }
     else if (collision(blankFloatingIsland4->bbox, yBBox) && belowblankFloatingIsland4)
     {
         collisionTrue(blankFloatingIsland4->bbox);
+    }
+    else if (collision(blankFloatingIsland5->bbox, yBBox) && belowblankFloatingIsland5)
+    {
+        collisionTrue(blankFloatingIsland5->bbox);
+    }
+    else if (collision(pathFloatingIsland2->bbox, yBBox) && belowpathFloatingIsland2)
+    {
+        collisionTrue(pathFloatingIsland2->bbox);
     }
     else
     {
@@ -430,6 +487,9 @@ void SceneBasic_Uniform::drawScene()
     drawSpot(pathFloatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 3.0f);
     pathFloatingIsland->render();
 
+    drawSpot(pathFloatingIsland2->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 3.0f);
+    pathFloatingIsland2->render();
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, blankFloatingIslandTex);
     drawSpot(blankFloatingIsland->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
@@ -443,6 +503,19 @@ void SceneBasic_Uniform::drawScene()
 
     drawSpot(blankFloatingIsland4->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
     blankFloatingIsland4->render();
+
+    drawSpot(blankFloatingIsland5->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.01f);
+    blankFloatingIsland5->render();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, trampolineTex);
+    drawSpot(trampoline->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 0.3f);
+    trampoline->render();
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, finishLineTex);
+    drawSpot(finishLine->position, 0.0f, 0, vec3(1, 0.71f, 0.29f), 10.0f);
+    finishLine->render();
 
     cameraPosition = knuckles->position;
 

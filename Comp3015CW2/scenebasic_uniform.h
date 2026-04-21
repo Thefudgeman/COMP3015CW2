@@ -20,8 +20,12 @@ private:
     std::unique_ptr<ObjMesh> mesh;
     
     std::unique_ptr<ObjMesh> floatingIsland, floatingIsland2, floatingIsland3, floatingIsland4, floatingIsland5;
-    std::unique_ptr<ObjMesh> pathFloatingIsland;
-    std::unique_ptr<ObjMesh> blankFloatingIsland, blankFloatingIsland2, blankFloatingIsland3, blankFloatingIsland4;
+    std::unique_ptr<ObjMesh> pathFloatingIsland, pathFloatingIsland2;
+    std::unique_ptr<ObjMesh> blankFloatingIsland, blankFloatingIsland2, blankFloatingIsland3, blankFloatingIsland4, blankFloatingIsland5;
+    std::unique_ptr<ObjMesh> trampoline;
+    std::unique_ptr<ObjMesh> finishLine;
+
+
 
     ISoundEngine* JumpLandingSound = createIrrKlangDevice();
     ISoundEngine* engine = createIrrKlangDevice();
@@ -64,8 +68,13 @@ private:
 
     GLuint blankFloatingIslandTex = Texture::loadTexture("media/Island/DefaultMaterial_Base_color.png");
 
-    ISoundEngine* splash = createIrrKlangDevice();
-    ISound* splashNoise = splash->play2D("music/Splash.mp3", false, true);
+    GLuint trampolineTex = Texture::loadTexture("media/Trampoline/trampoline.png");
+
+    GLuint finishLineTex = Texture::loadTexture("media/FinishLine/finish_Base_Color.png");
+
+    ISoundEngine* soundFX = createIrrKlangDevice();
+    ISound* splashNoise = soundFX->play2D("music/Splash.mp3", false, true);
+    ISound* finishMusic = soundFX->play2D("music/FinishMusic.mp3", false, true);
 
     float lightAngle, lightRotationSpeed;
     void drawScene();
