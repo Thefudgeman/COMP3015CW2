@@ -2,9 +2,20 @@
 Visual Studio 2022 <br>
 Windows 11
 
-# Gameplay explanation
+# How to play
+
+## Goal of the game
 The goal of the game is to jump across the floating islands and climb up to reach the finish line.
-The player model can be controlled with WASD to move around, space to jump and move the mouse to look around.
+
+## Installation
+Download the submission from the DLE and extract the ZIP file.<br>
+The folder inside named COMP3015CW2 Exe contains the execuateble. <br>
+Run the file named Project_Template.exe to play the game.
+
+## Controls
+Use WASD to move around the game. <br>
+Press space to jump. <br>
+Use the mouse to control the camera. <br>
 
 # How it works
 The camera is attached to a model that is not rendered so that physics can be applied to the model and the camera just sets its position to the models position each update. 
