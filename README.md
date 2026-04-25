@@ -29,7 +29,8 @@ This is done so that the same sound is not played every update.
 Once it is complete it is paused again so if the player falls again the sound can be played.
 The footsteps sound works similarly to the splash sound but it is set to loop. It also checks for the velocity of the model to see if they are standing still or are jumpin/falling to pause the sound. <br>
 
-Vertex animation was used on a plane to create the ocean at the bottom that the player needs to avoid falling into and PBR was implemented as an improvement for lighting over Blinn-Phong
+Vertex animation was used on a plane to create the ocean at the bottom that the player needs to avoid falling into and PBR was implemented as an improvement for lighting over Blinn-Phong.
+The lighting values are set quite high because the light source was placed far away to act like the sun does which prevents parts of the game looking way brighter than other parts.
 
 
 # Repository Link
