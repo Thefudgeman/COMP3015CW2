@@ -9,7 +9,9 @@ The goal of the game is to jump across the floating islands and climb up to reac
 
 ## Installation
 Download the submission from the DLE and extract the ZIP file.<br>
-The folder inside named COMP3015CW2 Exe contains the execuateble. <br>
+The folder named Solution contains the visual studio project <br>
+To open the visual studio project click on Project_Template.sln <br>
+The folder inside named Executable contains the executable. <br>
 Run the file named Project_Template.exe to play the game.
 
 ## Controls
@@ -33,13 +35,13 @@ The position of the player collision box has to be updated every update to match
 Before the player models position is updated it checks what it will be and checks for a collision.
 If it will end up below the top part of the model then the player model will not move down in the y direction that update. 
 Because collision is only handled for falling through the top of the model the player can still jump through the side or bottom of the floating islands. 
-The trampoline works slighly differently to the floating islands as if there is a collision detected then the player is given a large boost in their y velocity.
+The trampoline works slightly differently to the floating islands as if there is a collision detected then the player is given a large boost in their y velocity.
 The finish line also uses this code but if there is a collision it plays some music instead of adjusting the models velocity. <br>
 
 IrrKlang was used to add music and sound into the game.
 For the background music when the sound engine is created it is set to loop the song but for other sound effects a sound is created using the sound engine and it set to pause at the beginning.
 An example of this would be the splash sound when you fall into the water.
-This sound is paused but when the player models y positon is low enough there is a condition that checks if the splash sound is paused and if it is then the sound is played.
+This sound is paused but when the player models y position is low enough there is a condition that checks if the splash sound is paused and if it is then the sound is played.
 This is done so that the same sound is not played every update.
 Once it is complete it is paused again so if the player falls again the sound can be played.
 The footsteps sound works similarly to the splash sound but it is set to loop. It also checks for the velocity of the model to see if they are standing still or are jumpin/falling to pause the sound. <br>
