@@ -22,9 +22,7 @@ public:
     void updatePhysics(float dt);
 
     glm::vec3 position = glm::vec3(0, 50, 0);
-    glm::vec3 acceleration = glm::vec3(0, -9.81, 0);
     glm::vec3 velocity = glm::vec3(0, 0, 0);
-    glm::vec3 hitBox = glm::vec3(0, 0, 0);
     Aabb bbox;
     bool isGrounded;
     bool jumping;

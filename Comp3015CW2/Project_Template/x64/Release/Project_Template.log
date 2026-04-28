@@ -1,23 +1,7 @@
-﻿  glad.c
-  cube.cpp
-  frustum.cpp
-  glslprogram.cpp
-  glutils.cpp
-  grid.cpp
-  objmesh.cpp
-C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\helper\grid.cpp(9,26): warning C4101: 'z': unreferenced local variable
-C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\helper\grid.cpp(9,13): warning C4101: 'x': unreferenced local variable
+﻿  objmesh.cpp
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\helper\objmesh.cpp(192,41): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\helper\objmesh.cpp(198,48): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\helper\objmesh.cpp(202,43): warning C4267: '+=': conversion from 'size_t' to 'int', possible loss of data
-  plane.cpp
-  skybox.cpp
-  sphere.cpp
-  stb_image.cpp
-  teapot.cpp
-  texture.cpp
-  torus.cpp
-  trianglemesh.cpp
   main.cpp
   scenebasic_uniform.cpp
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(186,29): warning C4305: 'argument': truncation from 'double' to 'irrklang::ik_f32'
@@ -25,7 +9,7 @@ C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_unif
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(191,14): warning C4101: 'z': unreferenced local variable
 C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\scenebasic_uniform.cpp(191,11): warning C4101: 'x': unreferenced local variable
   Generating code
-  Previous IPDB not found, fall back to full compilation.
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
   All 1447 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   Project_Template.vcxproj -> C:\Users\theob\OneDrive\Documents\GitHub\COMP3015CW2\Comp3015CW2\x64\Release\Project_Template.exe
