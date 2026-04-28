@@ -17,6 +17,10 @@ Use WASD to move around the game. <br>
 Press space to jump. <br>
 Use the mouse to control the camera. <br>
 
+# CW2 shader features
+PBR lighting was used in both vertexAnim.frag and CW2frag.frag as an improvement over blinn-phong lighting used in CW1. <br>
+Vertex animation was used to create an ocean with waves beneath the player. The code for this can be seen in vertexAnim.vert.
+
 # How it works
 The camera is attached to a model that is not rendered so that physics can be applied to the model and the camera just sets its position to the models position each update. 
 The model has been given velocity and acceleration and its position is updated by multiplying its velocity by the time difference between updates.
